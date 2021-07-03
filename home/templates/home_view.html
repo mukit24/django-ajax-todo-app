@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+
+<body class="bg-dark">
+    <div class="container">
+        <div class="title text-center my-3">
+            <h2><span class="badge badge-secondary py-2 px-3">Django Ajax TODO App</span> </h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="add_task">
+                    <h4 class="text-center text-light">Add Task</h4>
+                    <div class="add_task_form">
+                        <form action="{% url 'add_task' %}" method="POST">
+                            {% csrf_token %}
+                            {{task_form}}
+                            <input type="submit" value="Submit" class="btn btn-success btn-sm mt-1">
+                        </form>
+                    </div>
+                </div>
+                <div class="task_list_summary mt-2">
+                    <h4 class="text-center text-light">Task List Summary</h4>
+                    <h6 class="alert alert-primary p-1 mb-1 text-center">Total Task <span class="badge badge-light">{{tasks.count}}</span></h6>
+                    <h6 class="alert alert-danger p-1 mb-1 text-center">Pending <span class="badge badge-light">{{pen}}</span></h6>
+                    <h6 class="alert alert-warning p-1 mb-1 text-center">In Progress <span class="badge badge-light">{{prog}}</span></h6>
+                    <h6 class="alert alert-success p-1 mb-1 text-center">Complete <span class="badge badge-light">{{com}}</span></h6>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="task_list">
+                    <h4 class="text-center text-light">Task List</h4>
+                    <div class="table-responsive">
+                        <table class="table table-light table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Task Name</th>
+                                    <th>Status</th>
+                                    <th>Operation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task in tasks %}
+                                {% if task.status == 'Pending' %}
+                                <tr class="table-danger">
+                                    {% include 'inside_tr.html' %}
+                                </tr>
+                                {% elif task.status == 'In Progress' %}
+                                <tr class="table-warning">
+                                    {% include 'inside_tr.html' %}
+                                </tr>
+                                {% else %}
+                                <tr class="table-success">
+                                    {% include 'inside_tr.html' %}
+                                </tr>
+                                {% endif %}
+    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
