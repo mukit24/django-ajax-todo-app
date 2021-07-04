@@ -27,10 +27,10 @@ def create_task(request):
         obj = task_form.save()
         data = Task.objects.values().get(id=obj.id)
         return JsonResponse({'status':'success','data':data})
-    print(task_form.errors)
     return JsonResponse({'status':'fail'})
 
-def delete_task(request,id):
+def delete_task(request):
+    id = request.GET['sid']
     task = Task.objects.get(id=id)
     task.delete()
-    return redirect('home_view')
+    return JsonResponse({'status':'success','task_status': task.status})

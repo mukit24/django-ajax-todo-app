@@ -16,3 +16,7 @@ td {
   font-size: 18px;
   cursor: pointer;
 }
+
+.notification .alert{
+  display: none;
+}
