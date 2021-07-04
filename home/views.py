@@ -1,6 +1,9 @@
+from django import forms
 from django.shortcuts import render,redirect
 from .forms import TaskForm
 from .models import Task
+from django.http import JsonResponse
+
 # Create your views here.
 def home_view(request):
     task_form = TaskForm()
@@ -19,10 +22,13 @@ def home_view(request):
 
 def create_task(request):
     task_form = TaskForm(request.POST or None)
+    print(request.POST)
     if task_form.is_valid():
-        task_form.save()
-        return redirect('home_view')
-    return redirect('home_view')
+        obj = task_form.save()
+        data = Task.objects.values().get(id=obj.id)
+        return JsonResponse({'status':'success','data':data})
+    print(task_form.errors)
+    return JsonResponse({'status':'fail'})
 
 def delete_task(request,id):
     task = Task.objects.get(id=id)

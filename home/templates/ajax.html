@@ -1,0 +1,40 @@
+<script>
+    $('#create_task_btn').click(function(e){
+        e.preventDefault();
+
+        my_data = {
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            name: $('#id_name').val(),
+            status: $('#id_status').val(),
+        }
+
+        $.ajax({
+            url: "{% url 'add_task' %}",
+            method: "POST",
+            data: my_data,
+            success: function(data){
+                console.log(data);
+                if(data.status == 'success'){
+                    $('#add_task_form').trigger('reset');
+                    let output;
+                    let task = data.data;
+                    // 
+                    
+                    output = '<tr><td>'+task.name+'</td><td>'+task.status+'</td><td><i class="fa fa-edit text-primary mr-2"data-toggle="tooltip" title="Edit"></i><i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" title="Delete"></i></td></tr>';
+
+                    $('#task_tbody').append(output);
+
+                    if (task.status == 'Pending'){
+                        $('#task_tbody').find('tr').last().addClass('table-danger');
+                    }
+                    else if(task.status == 'In Progress'){
+                        $('#task_tbody').find('tr').last().addClass('table-warning');
+                    }
+                    else{
+                        $('#task_tbody').find('tr').last().addClass('table-success');
+                    }
+                }
+            }
+        })
+    })
+</script>

@@ -33,10 +33,10 @@
                 <div class="add_task">
                     <h4 class="text-center text-light">Add Task</h4>
                     <div class="add_task_form">
-                        <form action="{% url 'add_task' %}" method="POST">
+                        <form id="add_task_form">
                             {% csrf_token %}
                             {{task_form}}
-                            <input type="submit" value="Submit" class="btn btn-success btn-sm mt-1">
+                            <input type="submit" value="Submit" class="btn btn-success btn-sm mt-1" id="create_task_btn">
                         </form>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                                     <th>Operation</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="task_tbody">
                                 {% for task in tasks %}
                                 {% if task.status == 'Pending' %}
                                 <tr class="table-danger">
@@ -75,7 +75,6 @@
                                     {% include 'inside_tr.html' %}
                                 </tr>
                                 {% endif %}
-    
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -86,5 +85,5 @@
         </div>
     </div>
 </body>
-
+{% include 'ajax.html' %}
 </html>
