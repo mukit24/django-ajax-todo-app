@@ -22,6 +22,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'main.css' %}">
 
+    <style>
+        #edit_task_btn{
+            display: none;
+        }
+    </style>
+
 </head>
 
 <body class="bg-dark">
@@ -37,7 +43,9 @@
                         <form id="add_task_form">
                             {% csrf_token %}
                             {{task_form}}
+                            <input type="hidden" name="sid" id="id_input">
                             <input type="submit" value="Submit" class="btn btn-success btn-sm mt-1" id="create_task_btn">
+                            <input type="submit" value="Edit" class="btn btn-primary btn-sm mt-1" id="edit_task_btn">
                         </form>
                     </div>
                 </div>
@@ -101,4 +109,21 @@
     </div>
 </body>
 {% include 'ajax.html' %}
+<script>
+    $('tbody').on('click','#edit_btn',function(e){
+        e.preventDefault();
+        $('.notification .alert').hide();
+        let id = $(this).attr('data-sid');
+
+        let status = $(this).parent().siblings('#task_status').text();
+        let name = $(this).parent().siblings('#task_name').text();
+
+        $('.add_task h4').text('Edit Task');
+        $('#edit_task_btn').show();
+        $('#create_task_btn').hide();
+        $('#id_input').val(id);
+        $('#id_name').val(name);
+        $('#id_status').val(status);
+    })
+</script>
 </html>

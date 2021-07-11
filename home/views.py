@@ -22,7 +22,7 @@ def home_view(request):
 
 def create_task(request):
     task_form = TaskForm(request.POST or None)
-    print(request.POST)
+    # print(request.POST)
     if task_form.is_valid():
         obj = task_form.save()
         data = Task.objects.values().get(id=obj.id)
@@ -34,3 +34,12 @@ def delete_task(request):
     task = Task.objects.get(id=id)
     task.delete()
     return JsonResponse({'status':'success','task_status': task.status})
+
+def edit_task(request):
+    print(request.POST)
+    id = request.POST['sid']
+    task = Task.objects.get(id=id)
+    task_form = TaskForm(request.POST or None, instance=task)
+    if task_form.is_valid():
+        task_form.save()
+    return JsonResponse({'status':'success'})

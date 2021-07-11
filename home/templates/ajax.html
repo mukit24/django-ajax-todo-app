@@ -32,7 +32,7 @@
                     let output;
                     let task = data.data;
 
-                    output = '<tr><td>' + task.name + '</td><td>' + task.status + '</td><td><i class="fa fa-edit text-primary mr-2"data-toggle="tooltip" title="Edit"></i><i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" data-sid="'+task.id+'" id="dlt_btn" title="Delete"></i></td></tr>';
+                    output = '<tr><td>' + task.name + '</td><td>' + task.status + '</td><td><i class="fa fa-edit text-primary mr-2"data-toggle="tooltip" title="Edit" data-sid="'+task.id+'" id="edit_btn"></i><i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" data-sid="'+task.id+'" id="dlt_btn" title="Delete"></i></td></tr>';
 
                     $('#task_tbody').append(output);
 
@@ -89,5 +89,20 @@
                 }
             }
         })
+    })
+
+    $('#edit_task_btn').click(function(e){
+        e.preventDefault();
+        var form = $(this).closest('form');
+
+        $.ajax({
+            url: "{% url 'edit_task' %}",
+            method: 'POST',
+            data: $(form).serialize(),
+            success: function(data){
+                console.log(data);
+            }
+        })
+
     })
 </script>

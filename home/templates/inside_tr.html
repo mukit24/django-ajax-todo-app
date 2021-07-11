@@ -1,6 +1,6 @@
-<td>{{task.name}}</td>
-<td>{{task.status}}</td>
+<td id="task_name">{{task.name}}</td>
+<td id="task_status">{{task.status}}</td>
 <td>
-    <i class="fa fa-edit text-primary mr-2" data-toggle="tooltip" title="Edit"></i>
+    <i class="fa fa-edit text-primary mr-2" data-toggle="tooltip" title="Edit" data-sid="{{task.id}}" id="edit_btn"></i>
     <i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" title="Delete" data-sid="{{task.id}}" id="dlt_btn"></i>
 </td>
