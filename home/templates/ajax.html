@@ -1,14 +1,16 @@
 <script>
-    function status_check(val,factor) {
-        if (val == 'Pending') {
-            $('#pending_task').text(parseInt($('#pending_task').text()) + factor);
-        }
-        else if (val == 'In Progress') {
-            $('#progress_task').text(parseInt($('#progress_task').text()) + factor);
-        }
-        else {
-            $('#complete_task').text(parseInt($('#complete_task').text()) + factor);
-        }
+    function status_check() {
+        $.ajax({
+            url: '/count_task/',
+            data: '',
+            success: function (data) {
+                $('#total_task').text(data.total);
+                $('#pending_task').text(data.pending);
+                $('#progress_task').text(data.progress);
+                $('#complete_task').text(data.complete);
+
+            }
+        });
     }
 
     $('#create_task_btn').click(function (e) {
@@ -22,7 +24,7 @@
         }
 
         $.ajax({
-            url: "{% url 'add_task' %}",
+            url: "/add_task/",
             method: "POST",
             data: my_data,
             success: function (data) {
@@ -32,7 +34,7 @@
                     let output;
                     let task = data.data;
 
-                    output = '<tr><td>' + task.name + '</td><td>' + task.status + '</td><td><i class="fa fa-edit text-primary mr-2"data-toggle="tooltip" title="Edit" data-sid="'+task.id+'" id="edit_btn"></i><i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" data-sid="'+task.id+'" id="dlt_btn" title="Delete"></i></td></tr>';
+                    output = '<tr><td id="task_name">' + task.name + '</td><td id="task_status">' + task.status + '</td><td><i class="fa fa-edit text-primary mr-2"data-toggle="tooltip" title="Edit" data-sid="'+task.id+'" id="edit_btn"></i><i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" data-sid="'+task.id+'" id="dlt_btn" title="Delete"></i></td></tr>';
 
                     $('#task_tbody').append(output);
 
@@ -49,7 +51,7 @@
                         $('#task_tbody').find('tr').last().addClass('table-success');
                     }
 
-                    status_check(task.status,1);
+                    status_check();
 
                     //notification
                     $('.notification #task_added').show(500);
@@ -73,7 +75,7 @@
 
         let my_this = this;
         $.ajax({
-            url: "{% url 'delete_task' %}",
+            url: "/delete_task/",
             method: "GET",
             data: my_data,
             success: function(data){
@@ -81,8 +83,7 @@
                     $(my_this).closest('tr').fadeOut(500);
 
                     //summary
-                    $('#total_task').text(parseInt($('#total_task').text()) - 1);
-                    status_check(data.task_status,-1);
+                    status_check();
 
                     //notification
                     $('#task_delete').show(500);
@@ -91,16 +92,40 @@
         })
     })
 
-    $('#edit_task_btn').click(function(e){
+    $('body').on('click','#edit_task_btn',function(e){
         e.preventDefault();
         var form = $(this).closest('form');
-
+        console.log('yooo0000');
         $.ajax({
-            url: "{% url 'edit_task' %}",
+            url: "/edit_task/",
             method: 'POST',
             data: $(form).serialize(),
             success: function(data){
-                console.log(data);
+                if(data.status == 'success'){
+                    console.log(data);
+                    var updated_tr = $('tbody').find('i[data-sid='+data.id+']').closest('tr');
+                    console.log(updated_tr)
+                    output = '<td id="task_name">' + data.name + '</td><td id="task_status">' + data.task_status + '</td><td><i class="fa fa-edit text-primary mr-2"data-toggle="tooltip" title="Edit" data-sid="'+data.id+'" id="edit_btn"></i><i class="fa fa-trash text-danger mr-2" data-toggle="tooltip" data-sid="'+data.id+'" id="dlt_btn" title="Delete"></i></td>'
+
+                    $(updated_tr).html(output);
+                    $(updated_tr).removeClass();
+                    if (data.task_status == 'Pending') {
+                        $(updated_tr).addClass('table-danger');
+                    }
+                    else if (data.task_status == 'In Progress') {
+                        $(updated_tr).addClass('table-warning');
+                    }
+                    else {
+                        $(updated_tr).addClass('table-success');
+                    }
+                    $(form).trigger('reset');
+                    $('.add_task h4').text('Add Task');
+                    $('#edit_task_btn').hide();
+                    $('#create_task_btn').show();
+                    $('.notification #task_edited').show(500);
+
+                    status_check();
+                }
             }
         })
 

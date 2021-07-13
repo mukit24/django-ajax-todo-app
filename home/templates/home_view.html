@@ -22,10 +22,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'main.css' %}">
 
+    <script src="{% static 'main.js' %}"></script>
+
     <style>
-        #edit_task_btn{
-            display: none;
-        }
+        
     </style>
 
 </head>
@@ -34,6 +34,7 @@
     <div class="container">
         <div class="title text-center my-3">
             <h2><span class="badge badge-secondary py-2 px-3">Django Ajax TODO App</span> </h2>
+            <button class="btn btn-success btn-sm" id="refresh_btn"><i class="fa fa-refresh"></i> Refresh</button>
         </div>
         <div class="row">
             <div class="col-sm-4">
@@ -58,9 +59,13 @@
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <strong>Error! </strong>Feild Can't Be Blank
                     </div>
-                    <div class="alert alert-warning alert-dismissible fade show" id="task_delete">
+                    <div class="alert alert-danger alert-dismissible fade show" id="task_delete">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <strong>Done! </strong>Task Has Been Deleted
+                    </div>
+                    <div class="alert alert-primary alert-dismissible fade show" id="task_edited">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Success! </strong>Task Has Been Edited
                     </div>
                 </div>
                 <div class="task_list_summary mt-2">
@@ -110,20 +115,9 @@
 </body>
 {% include 'ajax.html' %}
 <script>
-    $('tbody').on('click','#edit_btn',function(e){
-        e.preventDefault();
-        $('.notification .alert').hide();
-        let id = $(this).attr('data-sid');
-
-        let status = $(this).parent().siblings('#task_status').text();
-        let name = $(this).parent().siblings('#task_name').text();
-
-        $('.add_task h4').text('Edit Task');
-        $('#edit_task_btn').show();
-        $('#create_task_btn').hide();
-        $('#id_input').val(id);
-        $('#id_name').val(name);
-        $('#id_status').val(status);
-    })
+    // $('#refresh_btn').click(function(e){
+    //     e.preventDefault();
+    //     console.log('yoooo');
+    // });
 </script>
 </html>

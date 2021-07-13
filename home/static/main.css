@@ -20,3 +20,17 @@ td {
 .notification .alert{
   display: none;
 }
+
+#edit_task_btn{
+  display: none;
+}
+
+*{
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 425px) {
+.title span{
+font-size: 18px;
+}
+}
