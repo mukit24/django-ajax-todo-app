@@ -1,1 +1,1 @@
-web: gunicorn django_ajax_todo.wsgi
+web: gunicorn django_ajax_todo.wsgi --log-file -
